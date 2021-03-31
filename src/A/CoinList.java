@@ -1,24 +1,42 @@
 package A;
 
+import java.util.Arrays;
+
 public class CoinList
 {
+    private String name;
     private int nbCoin;
-    private double[] listCoin;
+    private double[] CoinList;
 
-    public CoinList(int nbCoin)
+    //CONSTRUCTORS
+
+    public CoinList(String name, int nbCoin)
     {
+        this.name = name;
         this.nbCoin = 0;
-        this.listCoin = new double[nbCoin];
+        this.CoinList = new double[nbCoin];
     }
 
-    public CoinList(double[] listCoin)
+    public CoinList(String name, double[] CoinList)
     {
-        this.listCoin = listCoin;
+        this.name = name;
+        this.CoinList = CoinList;
     }
+
+    // GETTERS
 
     public int getNbCoin()
     {
         return nbCoin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double[] getCoinList()
+    {
+        return CoinList;
     }
 
     public void incNbCoin(int nbCoin)
@@ -26,8 +44,11 @@ public class CoinList
         this.nbCoin += 1;
     }
 
-    public double[] getListCoin()
+
+
+    public void showCoinList()
     {
-        return listCoin;
+        System.out.println("\"" + this.getName() + "\"" + " content is:");
+        System.out.println(Arrays.toString(getCoinList()));
     }
 }
