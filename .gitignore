@@ -1,0 +1,19 @@
+# Java and Package Files
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+*.zip
+*.tar.gz
+*.rar
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# Android Studio and Intellij
+.idea/
+*.ipr
+*.iws
+*.iml
