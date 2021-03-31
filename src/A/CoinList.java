@@ -3,17 +3,16 @@ package A;
 public class CoinList
 {
     private int nbCoin;
-    private int[] listCoin;
+    private double[] listCoin;
 
-    public CoinList(int nbCoin, int[] listCoin)
+    public CoinList(int nbCoin)
     {
-        this.nbCoin = nbCoin;
-        this.listCoin = listCoin;
+        this.nbCoin = 0;
+        this.listCoin = new double[nbCoin];
     }
 
-    public CoinList(int[] listCoin)
+    public CoinList(double[] listCoin)
     {
-        this.nbCoin = nbCoin;
         this.listCoin = listCoin;
     }
 
@@ -22,18 +21,13 @@ public class CoinList
         return nbCoin;
     }
 
-    public void setNbCoin(int nbCoin)
+    public void incNbCoin(int nbCoin)
     {
-        this.nbCoin = nbCoin;
+        this.nbCoin += 1;
     }
 
-    public int[] getListCoin()
+    public double[] getListCoin()
     {
         return listCoin;
-    }
-
-    public void setListCoin(int[] listCoin)
-    {
-        this.listCoin = listCoin;
     }
 }
