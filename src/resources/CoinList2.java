@@ -15,6 +15,13 @@ public class CoinList2 {
         this.totalValue = 0;
     }
 
+    public CoinList2(float[] valueList, float[] coinList, float totalValue)
+    {
+        this.valueList = valueList;
+        this.coinList = coinList;
+        this.totalValue = totalValue;
+    }
+
     //GETTERS
     public float[] getCoinList() {
         return coinList;

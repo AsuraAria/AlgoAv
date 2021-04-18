@@ -7,9 +7,8 @@ import resources.CoinList2;
 public class AlgoGen
 {
     CoinList2 coinList2;
-    float[] solution;
+    float[] bestSolution = new float[0];
     int[] compacteSolution;
-    boolean[] unusableCoin;
     float objective;
     boolean finished = false;
 
@@ -19,10 +18,7 @@ public class AlgoGen
         this.coinList2 = coinList2;
         // define objective
         this.objective = objective;
-        // boolean array is initialised at false
-        this.unusableCoin = new boolean[coinList2.getValueList().length];
         // init solution on coinList valutList length
-        this.solution = new float[] {};
     }
 
     //GETTERS
@@ -32,54 +28,40 @@ public class AlgoGen
     public float getObjective() {
         return objective;
     }
-    public float[] getSolution()
-    {
-        return this.solution;
-    }
     public int[] getCompacteSolution()
     {
         return this.compacteSolution;
+    }
+    public float[] getBest()
+    {
+        return this.bestSolution;
     }
     //SETTERS
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
-    public void setSolution(float[] solution)
-    {
-        this.solution=solution;
-    }
     public void setCompacteSolution(int [] cs)
     {
         this.compacteSolution = cs;
     }
+    public void setBest(float[] best)
+    {
+        this.bestSolution=best;
+    }
 
     // UTILITY
 
-    public void addUnusableCoin(float coinValue)
-    {
-        // search in valueList
-        for (int i=0; i<getCoinList().getValueList().length;i++)
-        {
-            // when i match values from coinValue and valueList
-            if (coinValue==getCoinList().getValueList()[i])
-            {
-                // set unusableCoin value of index i to true
-                this.unusableCoin[i] = true;
-            }
-        }
-    }
-
-    private float totalValue()
+    private float totalValue(float[] list)
     {
         float tv = 0;
-        for(float i : getSolution())
+        for(float i : list)
         {
             tv+=i;
         }
         return tv;
     }
 
-    private void generateCompacteSolution()
+/*    private void generateCompacteSolution()
     {
         int[] sol = new int[getCoinList().getValueList().length];
         for (int i =0; i< getCoinList().getValueList().length;i++)
@@ -93,93 +75,143 @@ public class AlgoGen
             }
         }
         setCompacteSolution(sol);
+    }*/
+
+    public void showRes()
+    {
+        //generateCompacteSolution();
+        System.out.println("\nSuccess");
+        System.out.println("Objective is : " + getObjective());
+        System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
+        //System.out.println("Solution is :"+Arrays.toString(getCompacteSolution())+"\n");
+        System.out.println("Solution is :"+Arrays.toString(getBest())+"\n");
     }
 
-    // adding a coin need not to to exceed the objective
-    public boolean valid()
+    private float[] addCoinToList(float j, float[] currentList)
     {
-        if (getCoinList().getTotalValue()>getObjective())
+        // enlarge coinList by creating a new list
+        float[] newCoinList = new float[currentList.length+1];
+        //copy old list
+        for (int i = 0; i < currentList.length; i++)
         {
-            // return false if coin exceed the objective
-            return false;
+            newCoinList[i] = currentList[i];
+        }
+        //adding the new value
+        newCoinList[newCoinList.length-1] = j;
+
+        return newCoinList;
+    }
+
+    //Composant de l'algorithme générique
+
+    // adding a coin need not to to exceed the objective, and we need to have less coins that current best sol
+    public boolean satisfaisant(float[] currentList)
+    {
+        boolean flag = false;
+        // if adding a coin does not exceed objective
+        if(totalValue(currentList)<= getObjective())
+        {
+            if(getBest().length==0 || currentList.length<getBest().length)
+            {
+                flag = true;
+            }
+
+        }
+        return flag;
+    }
+
+    // set flag to true if total coins value equals objective
+    public boolean solTrouve(float[] currentList)
+    {
+        boolean flag;
+        //System.out.println("tt " + totalValue(currentList));
+        //System.out.println("obj " + getObjective());
+        if(totalValue(currentList) == getObjective())
+        {
+            //System.out.println("FLAG");
+            flag = true;
         }
         else
         {
-            // else return true
-            return true;
+            flag = false;
         }
+        return flag;
     }
 
-    // set finished to true if total coins value equals objective
-    public void success()
+    // return to previous state by copying state without last value
+    public void defaire(CoinList2 coinList)
     {
-        if (getCoinList().getTotalValue()==getObjective())
+        // enlarge coinList by creating a new list
+        float[] newCoinList = new float[coinList.getCoinList().length-1];
+        //copy old list
+        for (int i = 0; i < newCoinList.length; i++)
         {
-            setFinished(true);
+            newCoinList[i] = coinList.getCoinList()[i];
         }
+        coinList.setCoinList(newCoinList);
     }
 
-    // return to previous state by removing last value in solution
-    public void undo()
+    //save the new best solution
+    public void enregistrer(float[] newBest)
     {
-        // recreating previous solution
-        float[] preState = new float[getCoinList().getCoinList().length-1];
-        for (int i = 0; i< preState.length; i++)
+        // new list
+        float[] newCoinList = new float[newBest.length];
+        //copy old list
+        for (int i = 0; i < newBest.length; i++)
         {
-            preState[i] = getSolution()[i];
+            newCoinList[i] = newBest[i];
         }
-        // setting removed value to unusable
-        addUnusableCoin(getCoinList().getCoinList()[getCoinList().getCoinList().length-1]);
-
-        // updating coinList object
-        getCoinList().setCoinList(preState);
-        getCoinList().updateTotalValue();
-
-        // updating solution
-        setSolution(preState);
+        setBest(newCoinList);
     }
 
 
     // WARNING : a solution MUST EXIST
-    public void resolve()
+    public void resolve2(CoinList2 coinList)
     {
-        while (!finished)
+        for (float j : getCoinList().getValueList())
         {
-            //iterate over coins value
-            for (float i : getCoinList().getValueList())
-            {
-                // while objective is not exceed add coin
-                while(valid())
-                {
-                    getCoinList().addCoin(i);
+            //adding the coin
+            coinList.addCoin(j);
 
-                    // save state if still valid
-                    if(valid())
+            //if adding the coin is good calling next step
+            if(satisfaisant(coinList.getCoinList()))
+            {
+                //check if adding this coin reach the objective
+                if (solTrouve(coinList.getCoinList()))
+                {
+                    System.out.println("Sol : " + (Arrays.toString(coinList.getCoinList())));
+                    //a solution is found, save if no solution is known
+                    if (getBest().length==0)
                     {
-                        setSolution(getCoinList().getCoinList());
+                        enregistrer(coinList.getCoinList());
+                    }
+                    //a solution is found, save if current solution is better
+                    if(coinList.getCoinList().length<getBest().length)
+                    {
+                        enregistrer(coinList.getCoinList());
                     }
                 }
-
-                // when exceed remove last coin
-                undo();
-                //then continue over next coin value
+                //else call anew resolve to pursue adding coin
+                else
+                    {
+                        //System.out.println("test");
+                        //create new object with the current properties
+                        resolve2(new CoinList2(coinList.getValueList(),coinList.getCoinList(),coinList.getTotalValue()));
+                        defaire(coinList);
+                    }
 
             }
-
-            // check if a solution is found
-            success();
+            else
+                {
+                    defaire(coinList);
+                }
+            // once all possibilities for current coin are tested, we will test with the next coin
+            // for that we need to remove the current coin
         }
-
-        // finished resolution message
-        if(getObjective()==totalValue())
-        {
-            generateCompacteSolution();
-            System.out.println("Success");
-            //getCoinList().show();
-            System.out.println("Objective is : " + getObjective());
-            System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
-            System.out.println("Solution is :"+Arrays.toString(getCompacteSolution())+"\n");
-        }
-        else{System.out.println("Fail\nNo solution found");}
+    }
+    public void resolve()
+    {
+        resolve2(getCoinList());
+        showRes();
     }
 }
