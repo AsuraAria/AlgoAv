@@ -1,44 +1,42 @@
-package A;
+package resources;
 
-import java.util.Arrays;
+public class CoinList2 {
 
-public class CoinListA {
-
-    private int[] valueList; // list of coins value
-    private int[] coinList; // array for coins taken
-    private int totalValue; // value of all coins
+    private final float[] valueList; // list of coins value
+    private float[] coinList; // array for coins taken
+    private float totalValue; // value of all coins
 
 
     //CONSTRUCTORS
 
-    public CoinListA(int[] valueList) {
+    public CoinList2(float[] valueList) {
         this.valueList = valueList;
-        this.coinList = new int[] {};
+        this.coinList = new float[] {};
         this.totalValue = 0;
     }
 
     //GETTERS
-    public int[] getCoinList() {
+    public float[] getCoinList() {
         return coinList;
     }
 
-    public int[] getValueList() {
+    public float[] getValueList() {
         return valueList;
     }
 
-    public int getTotalValue()
+    public float getTotalValue()
     {
         return this.totalValue;
     }
 
     //SETTERS
 
-    public void setTotalValue(int totalValue)
+    public void setTotalValue(float totalValue)
     {
         this.totalValue=totalValue;
     }
 
-    public void setCoinList(int[] coinList)
+    public void setCoinList(float[] coinList)
     {
         this.coinList= coinList;
     }
@@ -47,31 +45,21 @@ public class CoinListA {
 
     // Increment coin number tracker
 
-    public void addCoinOnList(int value)
+    public void addCoinOnList(float value)
     {
         // enlarge coinList by creating a new list
-        int[] newCoinList = new int[getCoinList().length+1];
+        float[] newCoinList = new float[getCoinList().length+1];
         for (int i = 0; i < getCoinList().length; i++)
             newCoinList[i] = getCoinList()[i];
         newCoinList[newCoinList.length-1] = value;
         setCoinList(newCoinList);
     }
 
-    // Show how coins values, coins list, and coins total
-
-    public void show() {
-        System.out.println("State :");
-        System.out.println("Coins value are:");
-        System.out.println(Arrays.toString(this.getValueList()));
-        System.out.println("\nThere is " + getCoinList().length + " coin(s) :");
-        System.out.println(Arrays.toString(this.getCoinList()));
-    }
-
-    public void addCoin(int value) {
+    public void addCoin(float value) {
         boolean flag = false;
         for (int i = 0; i < valueList.length; i++)
         {
-            int curentValue = this.valueList[i];
+            float curentValue = this.valueList[i];
             if (curentValue == value)
             {
                 this.addCoinOnList(value);
@@ -90,7 +78,7 @@ public class CoinListA {
 
     public void updateTotalValue()
     {
-        int temp = 0;
+        float temp = 0;
         for (int i = 0; i<getCoinList().length;i++)
         {
             temp+=coinList[i];

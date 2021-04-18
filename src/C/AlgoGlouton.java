@@ -2,35 +2,37 @@ package C;
 
 import java.util.Arrays;
 
+import resources.CoinList2;
+
 public class AlgoGlouton
 {
-    CoinListC coinListC;
-    int[] solution;
+    CoinList2 coinList2;
+    float[] solution;
     int[] compacteSolution;
     boolean[] unusableCoin;
-    int objective;
+    float objective;
     boolean finished = false;
 
-    public AlgoGlouton(CoinListC coinListC, int objective)
+    public AlgoGlouton(CoinList2 coinList2, float objective)
     {
         // create coinList object
-        this.coinListC = coinListC;
+        this.coinList2 = coinList2;
         // define objective
         this.objective = objective;
         // boolean array is initialised at false
-        this.unusableCoin = new boolean[coinListC.getValueList().length];
+        this.unusableCoin = new boolean[coinList2.getValueList().length];
         // init solution on coinList valutList length
-        this.solution = new int[] {};
+        this.solution = new float[] {};
     }
 
     //GETTERS
-    public CoinListC getCoinList() {
-        return coinListC;
+    public CoinList2 getCoinList() {
+        return coinList2;
     }
-    public int getObjective() {
+    public float getObjective() {
         return objective;
     }
-    public int[] getSolution()
+    public float[] getSolution()
     {
         return this.solution;
     }
@@ -42,7 +44,7 @@ public class AlgoGlouton
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
-    public void setSolution(int[] solution)
+    public void setSolution(float[] solution)
     {
         this.solution=solution;
     }
@@ -53,7 +55,7 @@ public class AlgoGlouton
 
     // UTILITY
 
-    public void addUnusableCoin(int coinValue)
+    public void addUnusableCoin(float coinValue)
     {
         // search in valueList
         for (int i=0; i<getCoinList().getValueList().length;i++)
@@ -67,10 +69,10 @@ public class AlgoGlouton
         }
     }
 
-    private int totalValue()
+    private float totalValue()
     {
-        int tv = 0;
-        for(int i : getSolution())
+        float tv = 0;
+        for(float i : getSolution())
         {
             tv+=i;
         }
@@ -82,7 +84,7 @@ public class AlgoGlouton
         int[] sol = new int[getCoinList().getValueList().length];
         for (int i =0; i< getCoinList().getValueList().length;i++)
         {
-            for(int val:getSolution())
+            for(float val:getSolution())
             {
                 if (val==getCoinList().getValueList()[i])
                 {
@@ -93,11 +95,8 @@ public class AlgoGlouton
         setCompacteSolution(sol);
     }
 
-    // CONSTITUANT DE L'ALGORITHME GENERIQUE
-
-    // Satisfaisant
     // adding a coin need not to to exceed the objective
-    public boolean satisfaisant()
+    public boolean valid()
     {
         if (getCoinList().getTotalValue()>getObjective())
         {
@@ -111,16 +110,8 @@ public class AlgoGlouton
         }
     }
 
-    // Enregistrer
-    // save modification
-    public void enregistrer()
-    {
-        setSolution(getCoinList().getCoinList());
-    }
-
-    // Soltrouvée
     // set finished to true if total coins value equals objective
-    public void solTrouvee()
+    public void success()
     {
         if (getCoinList().getTotalValue()==getObjective())
         {
@@ -128,12 +119,11 @@ public class AlgoGlouton
         }
     }
 
-    // Défaire
     // return to previous state by removing last value in solution
-    public void defaire()
+    public void undo()
     {
         // recreating previous solution
-        int[] preState = new int[getCoinList().getCoinList().length-1];
+        float[] preState = new float[getCoinList().getCoinList().length-1];
         for (int i = 0; i< preState.length; i++)
         {
             preState[i] = getSolution()[i];
@@ -149,42 +139,42 @@ public class AlgoGlouton
         setSolution(preState);
     }
 
+
+    // WARNING : a solution MUST EXIST
     public void resolve()
     {
         while (!finished)
         {
             //iterate over coins value
-            for (int i : getCoinList().getValueList())
+            for (float i : getCoinList().getValueList())
             {
                 // while objective is not exceed add coin
-                while(satisfaisant())
+                while(valid())
                 {
                     getCoinList().addCoin(i);
 
-                    // save state if valid
-                    if(satisfaisant())
+                    // save state if still valid
+                    if(valid())
                     {
-                        enregistrer();
+                        setSolution(getCoinList().getCoinList());
                     }
                 }
 
                 // when exceed remove last coin
-                defaire();
+                undo();
                 //then continue over next coin value
 
             }
 
             // check if a solution is found
-            solTrouvee();
-            // force kill
-            //setFinished(true);
+            success();
         }
 
         // finished resolution message
         if(getObjective()==totalValue())
         {
             generateCompacteSolution();
-            System.out.println("Sucess");
+            System.out.println("Success");
             //getCoinList().show();
             System.out.println("Objective is : " + getObjective());
             System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
