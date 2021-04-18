@@ -17,3 +17,4 @@ Thumbs.db
 *.ipr
 *.iws
 *.iml
+out/
