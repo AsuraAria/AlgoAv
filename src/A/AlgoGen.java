@@ -75,17 +75,6 @@ public class AlgoGen {
         System.out.println("Compact solution is :" + Arrays.toString(getCompactSolution()) + "\n");
     }
 
-    private float[] addCoinToList(float j, float[] currentList) {
-        // enlarge coinList by creating a new list
-        float[] newCoinList = new float[currentList.length + 1];
-        //copy old list
-        System.arraycopy(currentList, 0, newCoinList, 0, currentList.length);
-        //adding the new value
-        newCoinList[newCoinList.length - 1] = j;
-
-        return newCoinList;
-    }
-
     //Composant de l'algorithme générique
 
     // adding a coin need not to to exceed the objective, and we need to have less coins that current best sol

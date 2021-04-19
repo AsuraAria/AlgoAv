@@ -119,16 +119,14 @@ public class AlgoGlouton {
     }
 
     //sort valuelist for Glouton
-    private void sortMaxMin()
-    {
+    private void sortMaxMin() {
         //order min to max
         Arrays.sort(this.getCoinList().getValueList());
         //reverse to have max to min
         int listSize = this.getCoinList().getValueList().length;
         float[] tmp = new float[listSize];
-        for (int i = 0; i<listSize;i++)
-        {
-            tmp[i]=this.getCoinList().getValueList()[listSize-1-i];
+        for (int i = 0; i < listSize; i++) {
+            tmp[i] = this.getCoinList().getValueList()[listSize - 1 - i];
         }
         // affect sorted list to object
         this.getCoinList().setValueList(tmp);

@@ -78,12 +78,12 @@ public class AlgoDynamique {
         // Calcule le nombre de pièces minimum requis pour toutes les valeurs de 1 à l'objectif
         // Pour chaque case de tableMem, on mémorise également les pièces à rendre
         for (int i = 0; i <= objectiveCent; i++) {
-            for (int j = 0; j < coinListEntier.length; j++) {
-                if (coinListEntier[j] <= i) {
-                    int potentialAnswer = 1 + tableMem[i - coinListEntier[j]];
+            for (int k : coinListEntier) {
+                if (k <= i) {
+                    int potentialAnswer = 1 + tableMem[i - k];
                     tableMem[i] = Math.min(tableMem[i], potentialAnswer);
                     if (tableMem[i] >= potentialAnswer) {
-                        coinUsed[i] = coinListEntier[j];
+                        coinUsed[i] = k;
                     }
                 }
             }
