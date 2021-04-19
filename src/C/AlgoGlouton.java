@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 import resources.CoinList2;
 
-public class AlgoGlouton
-{
+public class AlgoGlouton {
     CoinList2 coinList2;
     float[] solution;
     int[] compacteSolution;
@@ -13,8 +12,7 @@ public class AlgoGlouton
     float objective;
     boolean finished = false;
 
-    public AlgoGlouton(CoinList2 coinList2, float objective)
-    {
+    public AlgoGlouton(CoinList2 coinList2, float objective) {
         // create coinList object
         this.coinList2 = coinList2;
         // define objective
@@ -22,73 +20,66 @@ public class AlgoGlouton
         // boolean array is initialised at false
         this.unusableCoin = new boolean[coinList2.getValueList().length];
         // init solution on coinList valutList length
-        this.solution = new float[] {};
+        this.solution = new float[]{};
     }
 
     //GETTERS
     public CoinList2 getCoinList() {
         return coinList2;
     }
+
     public float getObjective() {
         return objective;
     }
-    public float[] getSolution()
-    {
+
+    public float[] getSolution() {
         return this.solution;
     }
-    public int[] getCompacteSolution()
-    {
+
+    public int[] getCompacteSolution() {
         return this.compacteSolution;
     }
+
     //SETTERS
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
-    public void setSolution(float[] solution)
-    {
-        this.solution=solution;
+
+    public void setSolution(float[] solution) {
+        this.solution = solution;
     }
-    public void setCompacteSolution(int [] cs)
-    {
+
+    public void setCompacteSolution(int[] cs) {
         this.compacteSolution = cs;
     }
 
-    // UTILITY
+    // FUNCTIONS
 
-    public void addUnusableCoin(float coinValue)
-    {
+    public void addUnusableCoin(float coinValue) {
         // search in valueList
-        for (int i=0; i<getCoinList().getValueList().length;i++)
-        {
+        for (int i = 0; i < getCoinList().getValueList().length; i++) {
             // when i match values from coinValue and valueList
-            if (coinValue==getCoinList().getValueList()[i])
-            {
+            if (coinValue == getCoinList().getValueList()[i]) {
                 // set unusableCoin value of index i to true
                 this.unusableCoin[i] = true;
             }
         }
     }
 
-    private float totalValue()
-    {
+    private float totalValue() {
         float tv = 0;
-        for(float i : getSolution())
-        {
-            tv+=i;
+        for (float i : getSolution()) {
+            tv += i;
         }
         return tv;
     }
 
-    private void generateCompacteSolution()
-    {
+    private void generateCompacteSolution() {
         int[] sol = new int[getCoinList().getValueList().length];
-        for (int i =0; i< getCoinList().getValueList().length;i++)
-        {
-            for(float val:getSolution())
-            {
-                if (val==getCoinList().getValueList()[i])
-                {
-                    sol[i]+=1;
+        for (int i = 0; i < getCoinList().getValueList().length; i++) {
+            for (float val : getSolution()) {
+                if (val == getCoinList().getValueList()[i]) {
+                    sol[i] += 1;
                 }
             }
         }
@@ -96,40 +87,28 @@ public class AlgoGlouton
     }
 
     // adding a coin need not to to exceed the objective
-    public boolean valid()
-    {
-        if (getCoinList().getTotalValue()>getObjective())
-        {
-            // return false if coin exceed the objective
-            return false;
-        }
-        else
-        {
-            // else return true
-            return true;
-        }
+    public boolean valid() {
+        // return false if coin exceed the objective
+        // else return true
+        return !(getCoinList().getTotalValue() > getObjective());
     }
 
     // set finished to true if total coins value equals objective
-    public void success()
-    {
-        if (getCoinList().getTotalValue()==getObjective())
-        {
+    public void success() {
+        if (getCoinList().getTotalValue() == getObjective()) {
             setFinished(true);
         }
     }
 
     // return to previous state by removing last value in solution
-    public void undo()
-    {
+    public void undo() {
         // recreating previous solution
-        float[] preState = new float[getCoinList().getCoinList().length-1];
-        for (int i = 0; i< preState.length; i++)
-        {
+        float[] preState = new float[getCoinList().getCoinList().length - 1];
+        for (int i = 0; i < preState.length; i++) {
             preState[i] = getSolution()[i];
         }
         // setting removed value to unusable
-        addUnusableCoin(getCoinList().getCoinList()[getCoinList().getCoinList().length-1]);
+        addUnusableCoin(getCoinList().getCoinList()[getCoinList().getCoinList().length - 1]);
 
         // updating coinList object
         getCoinList().setCoinList(preState);
@@ -139,23 +118,34 @@ public class AlgoGlouton
         setSolution(preState);
     }
 
+    //sort valuelist for Glouton
+    private void sortMaxMin()
+    {
+        //order min to max
+        Arrays.sort(this.getCoinList().getValueList());
+        //reverse to have max to min
+        int listSize = this.getCoinList().getValueList().length;
+        float[] tmp = new float[listSize];
+        for (int i = 0; i<listSize;i++)
+        {
+            tmp[i]=this.getCoinList().getValueList()[listSize-1-i];
+        }
+        // affect sorted list to object
+        this.getCoinList().setValueList(tmp);
+    }
 
     // WARNING : a solution MUST EXIST
-    public void resolve()
-    {
-        while (!finished)
-        {
+    public void resolve() {
+        sortMaxMin();
+        while (!finished) {
             //iterate over coins value
-            for (float i : getCoinList().getValueList())
-            {
+            for (float i : getCoinList().getValueList()) {
                 // while objective is not exceed add coin
-                while(valid())
-                {
+                while (valid()) {
                     getCoinList().addCoin(i);
 
                     // save state if still valid
-                    if(valid())
-                    {
+                    if (valid()) {
                         setSolution(getCoinList().getCoinList());
                     }
                 }
@@ -171,15 +161,15 @@ public class AlgoGlouton
         }
 
         // finished resolution message
-        if(getObjective()==totalValue())
-        {
+        if (getObjective() == totalValue()) {
             generateCompacteSolution();
             System.out.println("Success");
             //getCoinList().show();
             System.out.println("Objective is : " + getObjective());
             System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
-            System.out.println("Solution is :"+Arrays.toString(getCompacteSolution())+"\n");
+            System.out.println("Solution is :" + Arrays.toString(getCompacteSolution()) + "\n");
+        } else {
+            System.out.println("Fail\nNo solution found");
         }
-        else{System.out.println("Fail\nNo solution found");}
     }
 }
