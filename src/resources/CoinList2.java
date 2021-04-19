@@ -1,5 +1,7 @@
 package resources;
 
+import java.util.Arrays;
+
 public class CoinList2 {
 
     private float[] valueList; // list of coins value
@@ -85,5 +87,21 @@ public class CoinList2 {
             temp += coinList[i];
         }
         setTotalValue(temp);
+    }
+
+    //sort valuelist from Max to Min
+    public void sortMaxMin()
+    {
+        //order min to max
+        Arrays.sort(getValueList());
+        //reverse to have max to min
+        int listSize = getValueList().length;
+        float[] tmp = new float[listSize];
+        for (int i = 0; i<listSize;i++)
+        {
+            tmp[i]=getValueList()[listSize-1-i];
+        }
+        // affect sorted list
+        setValueList(tmp);
     }
 }

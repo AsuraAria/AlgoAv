@@ -1,6 +1,5 @@
 package B;
 
-import A.AlgoGen;
 import resources.CoinList2;
 
 public class mainB {

@@ -136,7 +136,7 @@ public class AlgoGlouton {
 
     // WARNING : a solution MUST EXIST
     public void resolve() {
-        sortMaxMin();
+        this.getCoinList().sortMaxMin();
         while (!finished) {
             //iterate over coins value
             for (float i : getCoinList().getValueList()) {

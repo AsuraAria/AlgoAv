@@ -1,0 +1,50 @@
+//Variables
+
+liste flottant : solution //initialisé à vide, meilleure solution actuelle
+liste flottant : listeValeur // liste des valeurs de pièces
+liste flottant : listePiece //initialisé à vide
+flottant : objectif // valeur cherchée
+
+//Fonctions
+
+Fonction resoudre(liste flottant listePiece):
+
+
+// on boucle sur les valeurs de pièces
+Pour i dans listeValeur:
+
+	// on ajoute la pièce actuelle à la liste
+	ajoutPiece(i,listePiece)
+
+	// on vérifie le caractère satisfaisant de la nouvelle liste, satisfaisant contient les conditions d'élagage
+	Si satisfaisant(listePiece):
+	
+		// on vérifie si la nouvelle liste est solution
+		Si soltrouvée(listePiece):
+		
+			// si la nouvelle liste est solution on vérifie si elle est meilleure solution si il y avait une solution connu
+			Si taille(solution)>taille(listePiece) ou si solution est vide:
+				
+				// on enregistre la solution si elle est meilleure ou si c'est la première solution trouvé
+				enregistrer(listePiece)
+				
+			FinSi
+			
+		FinSi
+		
+		// si la liste n'est pas solution
+		Sinon:
+			
+			// on appel resoudre avec la nouvelle liste
+			resoudre(listePiece)
+			// on retire la pièce ajouté pour procéder à la suite des combinaisons
+			défaire(listePiece)
+		FinSinon
+	FinSi
+	Sinon
+		// on retire la pièce ajouté pour procéder à la suite des combinaisons
+		défaire(listePiece)
+	FinSinon
+FinPour
+
+

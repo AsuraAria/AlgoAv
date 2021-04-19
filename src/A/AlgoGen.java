@@ -166,6 +166,8 @@ public class AlgoGen {
     }
 
     public void resolve() {
+        //sort list before first call
+        this.getCoinList().sortMaxMin();
         resolve2(getCoinList());
         showRes();
     }

@@ -2,7 +2,6 @@ package B;
 
 import resources.CoinList2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AlgoDynamique {
