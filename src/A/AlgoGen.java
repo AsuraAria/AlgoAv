@@ -119,7 +119,7 @@ public class AlgoGen {
 
 
     // WARNING : a solution MUST EXIST
-    public void resolve2(CoinList coinList) {
+    public void resolveRec(CoinList coinList) {
         for (float j : getCoinList().getValueList()) {
             //adding the coin
             coinList.addCoin(j);
@@ -141,7 +141,7 @@ public class AlgoGen {
                 //else call anew resolve to pursue adding coin
                 else {
                     //create new object with the current properties
-                    resolve2(new CoinList(coinList.getValueList(), coinList.getCoinList(), coinList.getTotalValue()));
+                    resolveRec(new CoinList(coinList.getValueList(), coinList.getCoinList(), coinList.getTotalValue()));
                     //the new call to resolve2 will add a coin, thus removing it after use and before next loop is required
                     defaire(coinList);
                 }
@@ -157,7 +157,7 @@ public class AlgoGen {
     public void resolve() {
         //sort list before first call
         this.getCoinList().sortMaxMin();
-        resolve2(getCoinList());
+        resolveRec(getCoinList());
         showRes();
     }
 }
