@@ -6,11 +6,9 @@ import resources.CoinList;
 
 public class AlgoGlouton {
     CoinList coinList;
-    float[] solution;
     int[] compacteSolution;
     boolean[] unusableCoin;
     float objective;
-    boolean finished = false;
 
     public AlgoGlouton(CoinList coinList, float objective) {
         // create coinList object
@@ -19,8 +17,6 @@ public class AlgoGlouton {
         this.objective = objective;
         // boolean array is initialised at false
         this.unusableCoin = new boolean[coinList.getValueList().length];
-        // init solution on coinList valutList length
-        this.solution = new float[]{};
     }
 
     //GETTERS
@@ -32,22 +28,11 @@ public class AlgoGlouton {
         return objective;
     }
 
-    public float[] getSolution() {
-        return this.solution;
-    }
-
     public int[] getCompacteSolution() {
         return this.compacteSolution;
     }
 
     //SETTERS
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
-
-    public void setSolution(float[] solution) {
-        this.solution = solution;
-    }
 
     public void setCompacteSolution(int[] cs) {
         this.compacteSolution = cs;
@@ -55,29 +40,18 @@ public class AlgoGlouton {
 
     // FUNCTIONS
 
-    public void addUnusableCoin(float coinValue) {
-        // search in valueList
-        for (int i = 0; i < getCoinList().getValueList().length; i++) {
-            // when i match values from coinValue and valueList
-            if (coinValue == getCoinList().getValueList()[i]) {
-                // set unusableCoin value of index i to true
-                this.unusableCoin[i] = true;
-            }
-        }
-    }
-
     private float totalValue() {
         float tv = 0;
-        for (float i : getSolution()) {
+        for (float i : getCoinList().getCoinList()) {
             tv += i;
         }
         return tv;
     }
 
-    private void generateCompacteSolution() {
+    private void generateCompactSolution() {
         int[] sol = new int[getCoinList().getValueList().length];
         for (int i = 0; i < getCoinList().getValueList().length; i++) {
-            for (float val : getSolution()) {
+            for (float val : getCoinList().getCoinList()) {
                 if (val == getCoinList().getValueList()[i]) {
                     sol[i] += 1;
                 }
@@ -86,88 +60,64 @@ public class AlgoGlouton {
         setCompacteSolution(sol);
     }
 
-    // adding a coin need not to to exceed the objective
-    public boolean valid() {
-        // return false if coin exceed the objective
-        // else return true
-        return !(getCoinList().getTotalValue() > getObjective());
-    }
-
-    // set finished to true if total coins value equals objective
-    public void success() {
-        if (getCoinList().getTotalValue() == getObjective()) {
-            setFinished(true);
-        }
-    }
-
     // return to previous state by removing last value in solution
     public void undo() {
         // recreating previous solution
-        float[] preState = new float[getCoinList().getCoinList().length - 1];
-        for (int i = 0; i < preState.length; i++) {
-            preState[i] = getSolution()[i];
+        float[] preState = new float[]{};
+
+        // if previous state was not null, copy it
+        if (getCoinList().getCoinList().length > 1) {
+            preState = new float[getCoinList().getCoinList().length - 1];
+            for (int i = 0; i < preState.length; i++) {
+                preState[i] = getCoinList().getCoinList()[i];
+            }
         }
-        // setting removed value to unusable
-        addUnusableCoin(getCoinList().getCoinList()[getCoinList().getCoinList().length - 1]);
 
         // updating coinList object
         getCoinList().setCoinList(preState);
         getCoinList().updateTotalValue();
 
         // updating solution
-        setSolution(preState);
-    }
-
-    //sort valuelist for Glouton
-    private void sortMaxMin() {
-        //order min to max
-        Arrays.sort(this.getCoinList().getValueList());
-        //reverse to have max to min
-        int listSize = this.getCoinList().getValueList().length;
-        float[] tmp = new float[listSize];
-        for (int i = 0; i < listSize; i++) {
-            tmp[i] = this.getCoinList().getValueList()[listSize - 1 - i];
-        }
-        // affect sorted list to object
-        this.getCoinList().setValueList(tmp);
+        getCoinList().setCoinList(preState);
     }
 
     // WARNING : a solution MUST EXIST
     public void resolve() {
+        //sort list from Max to Min
         this.getCoinList().sortMaxMin();
-        while (!finished) {
-            //iterate over coins value
+        //while objective is not reached loop
+        while (getObjective() != totalValue()) {
+            // loop on coin values
             for (float i : getCoinList().getValueList()) {
-                // while objective is not exceed add coin
-                while (valid()) {
+                // while we do not exceed, add a coin
+                while (getCoinList().getTotalValue() < getObjective()) {
                     getCoinList().addCoin(i);
-
-                    // save state if still valid
-                    if (valid()) {
-                        setSolution(getCoinList().getCoinList());
-                    }
                 }
 
-                // when exceed remove last coin
-                undo();
-                //then continue over next coin value
+                //after exiting while loop, if we exceed objective, remove last coin
+                if (getCoinList().getTotalValue() > getObjective())
+                {
+                    undo();
+                }
 
+                //if we have reach objective no action is takken
+
+                // at the end of the loop we continue with the next smaller coin
+                // if there is none the loop if finished and we have a solution
             }
 
-            // check if a solution is found
-            success();
+            // finished resolution message
+            // in case of some error there is still a final check
+            // mainly to prevent error if no solution exist
         }
-
-        // finished resolution message
+        System.out.println("Objective is : " + getObjective());
+        System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
         if (getObjective() == totalValue()) {
-            generateCompacteSolution();
+            generateCompactSolution();
             System.out.println("Success");
-            //getCoinList().show();
-            System.out.println("Objective is : " + getObjective());
-            System.out.println("Coins values are :" + Arrays.toString((getCoinList().getValueList())));
             System.out.println("Solution is :" + Arrays.toString(getCompacteSolution()) + "\n");
         } else {
-            System.out.println("Fail\nNo solution found");
+            System.out.println("Fail\nNo solution found\n");
         }
     }
 }

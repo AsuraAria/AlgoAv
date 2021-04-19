@@ -1,0 +1,32 @@
+//Variables
+
+liste flottant : listeValeur // liste des valeurs de pièces
+liste flottant : listePiece //initialisé à vide
+liste flottant : solution //initialisé à vide
+flottant : objectif // valeur cherchée
+booleen : fini // initialisé à faux
+//Fonctions
+
+Fonction resoudre(liste flottant listePiece):
+
+// on trie la liste de valeur dans un ordre décroissant
+triDec(listeValeur)
+
+// on boucle sur les valeurs de pièces
+Pour i dans listValeur:
+
+    //on ajoute une piece jusqu'à atteindre ou dépasser l'objectif
+    Tant que somme(listePiece) < objectif
+        ajoutPiece(i,listePiece)
+    FinTantQue
+
+	// si on a dépassé la valeur on retire la dernière pièce
+	Si somme(listePiece) > objectif
+	    enleverPièce(listePiece)
+
+	// si on a trouvé la solution on ne fait plus rien car la solution est stockée dans listPiece
+
+// on arrive à la fin de la boucle, si la pièce actuelle n'est pas la plus petite
+// on repart dans la boucle avec la pièce immédiatemment plus petites
+// sinon on sort de la boucle
+FinPour
