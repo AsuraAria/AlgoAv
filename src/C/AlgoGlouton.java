@@ -2,30 +2,30 @@ package C;
 
 import java.util.Arrays;
 
-import resources.CoinList2;
+import resources.CoinList;
 
 public class AlgoGlouton {
-    CoinList2 coinList2;
+    CoinList coinList;
     float[] solution;
     int[] compacteSolution;
     boolean[] unusableCoin;
     float objective;
     boolean finished = false;
 
-    public AlgoGlouton(CoinList2 coinList2, float objective) {
+    public AlgoGlouton(CoinList coinList, float objective) {
         // create coinList object
-        this.coinList2 = coinList2;
+        this.coinList = coinList;
         // define objective
         this.objective = objective;
         // boolean array is initialised at false
-        this.unusableCoin = new boolean[coinList2.getValueList().length];
+        this.unusableCoin = new boolean[coinList.getValueList().length];
         // init solution on coinList valutList length
         this.solution = new float[]{};
     }
 
     //GETTERS
-    public CoinList2 getCoinList() {
-        return coinList2;
+    public CoinList getCoinList() {
+        return coinList;
     }
 
     public float getObjective() {

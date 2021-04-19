@@ -2,25 +2,25 @@ package A;
 
 import java.util.Arrays;
 
-import resources.CoinList2;
+import resources.CoinList;
 
 public class AlgoGen {
-    CoinList2 coinList2;
+    CoinList coinList;
     float[] bestSolution = new float[0];
     int[] compacteSolution;
     float objective;
 
-    public AlgoGen(CoinList2 coinList2, float objective) {
+    public AlgoGen(CoinList coinList, float objective) {
         // create coinList object
-        this.coinList2 = coinList2;
+        this.coinList = coinList;
         // define objective
         this.objective = objective;
         // init solution on coinList valutList length
     }
 
     //GETTERS
-    public CoinList2 getCoinList() {
-        return coinList2;
+    public CoinList getCoinList() {
+        return coinList;
     }
 
     public float getObjective() {
@@ -109,7 +109,7 @@ public class AlgoGen {
     }
 
     // return to previous state by copying state without last value
-    public void defaire(CoinList2 coinList) {
+    public void defaire(CoinList coinList) {
         // enlarge coinList by creating a new list
         float[] newCoinList = new float[coinList.getCoinList().length - 1];
         //copy old list
@@ -130,7 +130,7 @@ public class AlgoGen {
 
 
     // WARNING : a solution MUST EXIST
-    public void resolve2(CoinList2 coinList) {
+    public void resolve2(CoinList coinList) {
         for (float j : getCoinList().getValueList()) {
             //adding the coin
             coinList.addCoin(j);
@@ -152,7 +152,7 @@ public class AlgoGen {
                 //else call anew resolve to pursue adding coin
                 else {
                     //create new object with the current properties
-                    resolve2(new CoinList2(coinList.getValueList(), coinList.getCoinList(), coinList.getTotalValue()));
+                    resolve2(new CoinList(coinList.getValueList(), coinList.getCoinList(), coinList.getTotalValue()));
                     //the new call to resolve2 will add a coin, thus removing it after use and before next loop is required
                     defaire(coinList);
                 }

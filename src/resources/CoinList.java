@@ -2,7 +2,7 @@ package resources;
 
 import java.util.Arrays;
 
-public class CoinList2 {
+public class CoinList {
 
     private float[] valueList; // list of coins value
     private float[] coinList; // array for coins taken
@@ -11,13 +11,13 @@ public class CoinList2 {
 
     //CONSTRUCTORS
 
-    public CoinList2(float[] valueList) {
+    public CoinList(float[] valueList) {
         this.valueList = valueList;
         this.coinList = new float[]{};
         this.totalValue = 0;
     }
 
-    public CoinList2(float[] valueList, float[] coinList, float totalValue) {
+    public CoinList(float[] valueList, float[] coinList, float totalValue) {
         this.valueList = valueList;
         this.coinList = coinList;
         this.totalValue = totalValue;

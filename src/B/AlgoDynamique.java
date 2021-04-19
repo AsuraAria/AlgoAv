@@ -1,18 +1,18 @@
 package B;
 
-import resources.CoinList2;
+import resources.CoinList;
 
 import java.util.Arrays;
 
 public class AlgoDynamique {
-    CoinList2 coinList2;
+    CoinList coinList;
     float objective;
     int[] compacteSolution;
     float[] solution;
 
-    public AlgoDynamique(CoinList2 coinList2, float objective) {
+    public AlgoDynamique(CoinList coinList, float objective) {
         // create coinList object
-        this.coinList2 = coinList2;
+        this.coinList = coinList;
         // define objective
         this.objective = objective;
         // init solution on coinList valutList length
@@ -20,8 +20,8 @@ public class AlgoDynamique {
     }
 
     //GETTERS
-    public CoinList2 getCoinList() {
-        return coinList2;
+    public CoinList getCoinList() {
+        return coinList;
     }
 
     public float getObjective() {
