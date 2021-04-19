@@ -1,7 +1,7 @@
 
 # Projet Algorithmique avancée 2020/2021  
   
-Le présent projet, c'est déroulé dans le cadre de la formation d'ingénieur informatique de deuxième année dispensé par l'ENSSAT.  
+Le présent projet, c'est déroulé dans le cadre de la formation d'ingénieur informatique de deuxième année dispensée par l'ENSSAT.  
   
 Le sujet de ce projet est l’algorithmique avancée. Il s'agit d'un travail en collaboration par [Lilian Savona](https://github.com/LilianSav) et [Marc Vacquant](https://github.com/AsuraAria).  
   
